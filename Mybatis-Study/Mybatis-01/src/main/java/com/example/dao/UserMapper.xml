@@ -5,8 +5,16 @@
 
 <!--namespace绑定一个对应的Dao/Mapper接口-->
 <mapper namespace="com.example.dao.UserMapper">
+
+    <!--    结果集映射-->
+    <resultMap id="UserMap" type="user">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pwd" property="passwd"/>
+    </resultMap>
+
     <!--    select查询语句-->
-    <select id="getUserList" resultType="user">
+    <select id="getUserList" resultMap="UserMap">
         select * from mybatis.user
     </select>
 

@@ -13,6 +13,7 @@
       <module name="Mybatis-02" target="1.5" />
       <module name="Mybatis-03" target="1.5" />
       <module name="Mybatis-04" target="1.5" />
+      <module name="Mybatis-05" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

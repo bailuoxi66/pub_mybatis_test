@@ -9,6 +9,10 @@
     <properties resource="db.properties">
         <property name="password" value="111"/>
     </properties>
+    
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
 <!--    可以给实体类起别名-->
     <typeAliases>
         <package name="com.example.pojo"/>    

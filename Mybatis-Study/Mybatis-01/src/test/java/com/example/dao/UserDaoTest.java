@@ -30,6 +30,20 @@ public class UserDaoTest {
     }
 
     @Test
+    public void tests(){
+        //第一步获取sqlSession对象
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        //方式一：getMapper
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        List<User> users = mapper.getUsers();
+        for (User user : users) {
+            System.out.println(user);
+        }
+        //关闭SqlSession
+        sqlSession.close();
+    }
+
+    @Test
     public void getUserByLimit(){
         //第一步获取sqlSession对象
         SqlSession sqlSession = MybatisUtils.getSqlSession();

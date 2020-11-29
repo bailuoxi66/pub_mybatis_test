@@ -10,6 +10,9 @@ public interface UserMapper {
     //模糊查询
     List<User> getUserLike(String value);
 
+    //分页
+    List<User> getUserByLimit(Map<String, Integer> map);
+
     //查询全部用户
     List<User> getUserList();
 

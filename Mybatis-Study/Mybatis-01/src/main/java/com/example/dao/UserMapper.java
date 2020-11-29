@@ -13,6 +13,9 @@ public interface UserMapper {
     //分页
     List<User> getUserByLimit(Map<String, Integer> map);
 
+    //分页RowBounds方式实现
+    List<User> getUserByRowBounds();
+
     //查询全部用户
     List<User> getUserList();
 

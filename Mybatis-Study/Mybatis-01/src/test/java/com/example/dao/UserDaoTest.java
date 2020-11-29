@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.pojo.User;
 import com.example.utils.MybatisUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -46,6 +47,20 @@ public class UserDaoTest {
 
         //关闭SqlSession
         sqlSession.close();
+    }
+
+    @Test
+    public void getUserByRowBounds(){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+
+        //RowBounds实现
+        RowBounds rowBounds = new RowBounds(1,2);
+
+        //通过java代码层面实现分页
+        List<User> userList = sqlSession.selectList("com.example.dao.UserMapper.getUserByRowBounds", null, rowBounds);
+        for (User user : userList){
+            System.out.println(user);
+        }
     }
 
     @Test

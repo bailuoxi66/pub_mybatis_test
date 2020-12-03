@@ -1,7 +1,7 @@
 package com.example.dao;
 
 import com.example.pojo.User;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -11,32 +11,16 @@ public interface UserMapper {
     @Select("select * from user")
     List<User> getUsers();
 
-    //模糊查询
-    List<User> getUserLike(String value);
+    //方法存在多个参数，基本类型的参数必须加上@Param("id")注解
+    @Select("select * from user where id = #{id}")
+    User getUserByID(@Param("id") int id);
 
-    //分页
-    List<User> getUserByLimit(Map<String, Integer> map);
-
-    //分页RowBounds方式实现
-    List<User> getUserByRowBounds();
-
-    //查询全部用户
-    List<User> getUserList();
-
-    //根据id查询用户
-    User getUserById(int id);
-
-    User getUserById2(Map<String,Object> map);
-
-    //insert一个用户
+    @Insert("insert into user(id, name, pwd) values (#{id}, #{name}, #{passwd})")
     int addUser(User user);
 
-    //万能的Map
-    int addUer2(Map<String,Object> map);
-
-    //update一个用户
+    @Update("update user set name=#{name}, pwd = #{passwd} where id = #{id}")
     int updateUser(User user);
 
-    //delete一个用户
-    int deleteUser(int id);
+    @Delete("delete from user where id = #{id}")
+    int deleteUser(@Param("id") int id);
 }

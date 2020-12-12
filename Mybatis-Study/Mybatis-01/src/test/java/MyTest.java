@@ -18,30 +18,30 @@ public class MyTest {
     public static void main(String[] args) {
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
-        Teacher teacher = mapper.getTeacher(1);
+        List<Teacher> teacherList = mapper.getTeacher();
+        for (Teacher teacher : teacherList) {
+            System.out.println(teacher);
+        }
+        sqlSession.close();
+    }
+
+    @Test
+    public void test() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
+        Teacher teacher = mapper.getTeachers(1);
         System.out.println(teacher);
+
         sqlSession.close();
     }
 
     @Test
-    public void testStudent(){
+    public void tests() {
         SqlSession sqlSession = MybatisUtils.getSqlSession();
-        StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);
-        List<Student> studentList= mapper.getStudent();
-        for (Student student : studentList) {
-            System.out.println(student);
-        }
-        sqlSession.close();
-    }
+        TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
+        Teacher teacher = mapper.getTeachers2(1);
+        System.out.println(teacher);
 
-    @Test
-    public void testStudent2(){
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);
-        List<Student> studentList= mapper.getStudent2();
-        for (Student student : studentList) {
-            System.out.println(student);
-        }
         sqlSession.close();
     }
 }

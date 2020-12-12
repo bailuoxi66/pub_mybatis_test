@@ -1463,5 +1463,93 @@ show tables;  //有了三张表了
 - 子查询：select（select）
 - 联表查询：where s.tid = t.id;
 
+### 4.9 一对多处理
 
+比如：一个老师拥有多个学生！
+
+对于老师而言，就是一对多的关系！
+
+#### 1、环境搭建，和刚才一样
+
+**实体类**
+
+```java
+@Data
+public class Student {
+
+    private int id;
+    private String name;
+    private int tid;
+}
+```
+
+```java
+@Data
+public class Teacher {
+
+    private int id;
+    private String name;
+
+    //一个老师拥有多个学生
+    private List<Student> students;
+}
+```
+
+#### 2、按照结果嵌套处理
+
+```xml
+    <select id="getTeachers" resultMap="TeacherStudent">
+        select s.id sid, s.name sname, t.name tname, t.id tid
+        from student s, teacher t
+        where s.tid = t.id and t.id = #{tid}
+    </select>
+
+    <resultMap id="TeacherStudent" type="Teacher">
+        <result property="id" column="tid"/>
+        <result property="name" column="tname"/>
+        <!--        复杂的属性，我们需要单独处理  对象/association  集合/collection
+        javaType="" 指定属性的类型！
+        集合中的泛型信息，我们使用ofType获取-->
+        <collection property="students" ofType="Student">
+            <result property="id" column="sid"/>
+            <result property="name" column="sname"/>
+            <result property="tid" column="tid"/>
+        </collection>
+    </resultMap>
+```
+
+#### 3、按照查询嵌套处理
+
+```xml
+
+    <select id="getTeachers2" resultMap="TeacherStudent2">
+        select * from teacher where id = #{tid}
+    </select>
+
+    <resultMap id="TeacherStudent2" type="Teacher">
+        <collection property="students" javaType="ArrayList" ofType="Student" select="getStudentByTeacherId" column="id"/>
+    </resultMap>
+    <select id="getStudentByTeacherId" resultType="Student">
+        select * from student where tid = #{tid}
+    </select>
+```
+
+#### 小结
+
+1、关联-association【多对一】
+
+2、集合-collection【一对多】
+
+3、javaType & ofType
+
+- javaType：用来指定实体类中属性的类型
+- ofType：用来指定映射到List或者集合中的pojo类型，泛型中的约束类型！
+
+注意点：
+
+保证SQL的可读性，尽量保证通俗易懂
+
+注意一对多或者多对一种，属性名和字段的问题
+
+如果问题不好排查错误，建议使用日志（log4j）
 

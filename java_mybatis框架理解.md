@@ -1553,3 +1553,87 @@ public class Teacher {
 
 如果问题不好排查错误，建议使用日志（log4j）
 
+### 4.10 动态sql
+
+什么是动态sql：动态sql就是根据不同的条件生成不同的sql
+
+利用动态sql这一特性可以彻底摆脱这种痛苦
+
+实体类
+
+```java
+@Data
+public class Blog {
+    private String id;
+    private String title;
+    private String author;
+    private Date createTime;   //字段名和属性名不一致
+    private int views;
+}
+```
+
+BlogMapper.xml
+
+```xml
+<mapper namespace="com.example.dao.BlogMapper">
+    <insert id="addBlog" parameterType="blog">
+        insert into blog (id, title, author, create_time, views)
+        values (#{id}, #{title}, #{author}, #{createTime}, #{views});
+    </insert>
+</mapper>
+```
+
+Test
+
+```java
+public class MyTest {
+    public static void main(String[] args) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        BlogMapper mapper = session.getMapper(BlogMapper.class);
+
+        Blog blog = new Blog();
+        blog.setId(IDUtils.getId());
+        blog.setTitle("Mybatis如此简单");
+        blog.setAuthor("小白");
+        blog.setCreateTime(new Date());
+        blog.setViews(9999);
+
+        mapper.addBlog(blog);
+
+        blog.setId(IDUtils.getId());
+        blog.setTitle("Java如此简单");
+        mapper.addBlog(blog);
+        blog.setId(IDUtils.getId());
+        blog.setTitle("Spring如此简单");
+        mapper.addBlog(blog);
+        blog.setId(IDUtils.getId());
+        blog.setTitle("微服务如此简单");
+        mapper.addBlog(blog);
+
+        session.close();
+    }
+}
+```
+
+#### IF
+
+```sql
+<select id="queryBlogIF" parameterType="map" resultType="Blog">
+        select * from blog where 1 = 1
+        <if test="title != null">
+            and title = #{title}
+        </if>
+        <if test="author != null">
+            and author = #{author}
+        </if>
+    </select>
+```
+
+
+
+
+
+
+
+
+

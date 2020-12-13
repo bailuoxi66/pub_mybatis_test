@@ -1,47 +1,56 @@
+import com.example.dao.BlogMapper;
 import com.example.dao.StudentMapper;
 import com.example.dao.TeacherMapper;
+import com.example.pojo.Blog;
 import com.example.pojo.Student;
 import com.example.pojo.Teacher;
+import com.example.utils.IDUtils;
 import com.example.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author <a href="mailto:liangzhengtao.lzt@lazada.com">liangzhengtao.lzt</a>
- * @version 1.0
- * @date 2020/12/12 2:03 上午
- * @desc
- */
 public class MyTest {
     public static void main(String[] args) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        BlogMapper mapper = session.getMapper(BlogMapper.class);
+
+        Blog blog = new Blog();
+        blog.setId(IDUtils.getId());
+        blog.setTitle("Mybatis如此简单");
+        blog.setAuthor("小白");
+        blog.setCreateTime(new Date());
+        blog.setViews(9999);
+
+        mapper.addBlog(blog);
+
+        blog.setId(IDUtils.getId());
+        blog.setTitle("Java如此简单");
+        mapper.addBlog(blog);
+        blog.setId(IDUtils.getId());
+        blog.setTitle("Spring如此简单");
+        mapper.addBlog(blog);
+        blog.setId(IDUtils.getId());
+        blog.setTitle("微服务如此简单");
+        mapper.addBlog(blog);
+
+        session.close();
+    }
+
+    @Test
+    public void queryBlogIF(){
         SqlSession sqlSession = MybatisUtils.getSqlSession();
-        TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
-        List<Teacher> teacherList = mapper.getTeacher();
-        for (Teacher teacher : teacherList) {
-            System.out.println(teacher);
+        BlogMapper mapper = sqlSession.getMapper(BlogMapper.class);
+
+        HashMap map = new HashMap();
+        //map.put("title", "Mybatis如此简单");
+        map.put("author", "小白");
+        List<Blog> blogs = mapper.queryBlogIF(map);
+        for (Blog blog : blogs) {
+            System.out.println(blog);
         }
-        sqlSession.close();
-    }
-
-    @Test
-    public void test() {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
-        Teacher teacher = mapper.getTeachers(1);
-        System.out.println(teacher);
-
-        sqlSession.close();
-    }
-
-    @Test
-    public void tests() {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
-        Teacher teacher = mapper.getTeachers2(1);
-        System.out.println(teacher);
-
-        sqlSession.close();
     }
 }

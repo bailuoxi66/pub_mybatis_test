@@ -10,9 +10,11 @@
         <property name="password" value="111"/>
     </properties>
     
-<!--    <settings>-->
-<!--        <setting name="logImpl" value="STDOUT_LOGGING"/>-->
-<!--    </settings>-->
+    <settings>
+<!--        是否开启驼峰命名自动映射，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
 <!--    可以给实体类起别名-->
     <typeAliases>
         <package name="com.example.pojo"/>    
@@ -32,6 +34,7 @@
     <mappers>
         <mapper class="com.example.dao.TeacherMapper"/>
         <mapper class="com.example.dao.StudentMapper"/>
+        <mapper class="com.example.dao.BlogMapper"/>
 <!--        <mapper class="com.example.dao.UserMapper"/>-->
 <!--        <package name="com.example.dao"/>-->
     </mappers>

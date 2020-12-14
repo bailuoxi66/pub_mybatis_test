@@ -956,7 +956,7 @@ id	name	passwd
 - resultMap最优秀地方在于，虽然你已经对它相当了解了，但是根本不需要显示用到他们
 - 如果世界总是这么简单就好了
 
-## 四、日志
+## 四、其他
 
 ### 4.1 日志工厂
 
@@ -1618,7 +1618,7 @@ public class MyTest {
 #### IF
 
 ```sql
-<select id="queryBlogIF" parameterType="map" resultType="Blog">
+		<select id="queryBlogIF" parameterType="map" resultType="Blog">
         select * from blog where 1 = 1
         <if test="title != null">
             and title = #{title}
@@ -1629,7 +1629,43 @@ public class MyTest {
     </select>
 ```
 
+#### trim(where、set)
 
+```sql
+    <select id="queryBlogChoose" parameterType="map" resultType="Blog">
+        select * from blog
+        <where>
+            <choose>
+                <when test="title != null">
+                    title = #{title}
+                </when>
+                <when test="author != null">
+                    and author = #{author}
+                </when>
+                <otherwise>
+                    and views = #{views}
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+```
+
+```sql
+    <update id="updateBlog" parameterType="map">
+        update blog
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="author != null">
+                author = #{author}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+```
+
+所谓的动态sql，本质还是sql语句，只是我们可以在sql层面，去执行一个逻辑代码
 
 
 

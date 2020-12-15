@@ -1,3 +1,5 @@
+
+
 # 		Mybatis
 
 ## 前沿
@@ -1667,7 +1669,81 @@ public class MyTest {
 
 所谓的动态sql，本质还是sql语句，只是我们可以在sql层面，去执行一个逻辑代码
 
+#### sql片段
 
+避免重复的代码片段，相当于是将公共的sql抽取出来，用于后续
+
+1、使用sql标签抽取公共的部分
+
+```sql
+    <sql id="if-title-author">
+        <if test="title != null">
+            and title = #{title}
+        </if>
+        <if test="author != null">
+            and author = #{author}
+        </if>
+    </sql>
+```
+
+2、在需要的地方使用include标签进行引用
+
+```sql
+    <select id="queryBlogIF" parameterType="map" resultType="Blog">
+        select * from blog
+        <where>
+            <include refid="if-title-author"></include>
+        </where>
+    </select>
+```
+
+- 最好基于单表来定义SQL片段！
+- 不要存在where标签
+
+#### foreach
+
+
+
+<img src="/Users/liangzhengtao/Library/Application Support/typora-user-images/image-20201215142425451.png" alt="image-20201215142425451" style="zoom:50%;" />
+
+```java
+//查询blog，通过foreach
+List<Blog> queryBlogForeach(Map map);
+```
+
+```sql
+    <select id="queryBlogForeach" parameterType="map" resultType="blog">
+        select * from blog
+        <where>
+            <foreach collection="ids" item="id" open="and (" close=")" separator="or">
+                id = #{id}
+            </foreach>
+        </where>
+    </select>
+```
+
+```java
+@Test
+    public void queryForEach(){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        BlogMapper mapper = sqlSession.getMapper(BlogMapper.class);
+
+        HashMap map = new HashMap();
+        ArrayList<String> ids = new ArrayList<String>();
+        ids.add("177e66fd930a484cbf87dadbea38be63");
+        map.put("ids", ids);
+        List<Blog> blogs = mapper.queryBlogForeach(map);
+        for (Blog blog : blogs) {
+            System.out.println(blog);
+        }
+    }
+```
+
+动态sql就是在拼接sql语句，我们只要保证sql的正确性，按照sql形式，去排列组合就OK了
+
+建议：
+
+- 先在Mysql中写具体的sql语句并且进行验证。然后就可以去处理后续的事情了
 
 
 

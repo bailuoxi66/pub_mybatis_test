@@ -15,14 +15,18 @@ public class UserDaoTest {
     static Logger logger = Logger.getLogger(UserDaoTest.class);
     @Test
     public void test(){
-        //第一步获取sqlSession对象
         SqlSession sqlSession = MybatisUtils.getSqlSession();
-        //方式一：getMapper
-        UserMapper userDao = sqlSession.getMapper(UserMapper.class);
-        User user = userDao.getUserByID(2);
-        logger.debug(user);
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+        User user = mapper.queryUserById(1);
         System.out.println(user);
-        //关闭SqlSession
+
+        //mapper.updateUser(new User(2, "aaa", "bbbb"));
+        sqlSession.clearCache();
+        System.out.println("===============================");
+        User user2 = mapper.queryUserById(1);
+        System.out.println(user == user2);
+
         sqlSession.close();
     }
 

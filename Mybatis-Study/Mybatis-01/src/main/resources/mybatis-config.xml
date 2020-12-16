@@ -11,8 +11,6 @@
     </properties>
     
     <settings>
-<!--        是否开启驼峰命名自动映射，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn-->
-        <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings>
 <!--    可以给实体类起别名-->
@@ -32,10 +30,6 @@
     </environments>
 <!--    每一个Mapper.XML都需要在Mybatis-config.xml核心配置文件里面注册-->
     <mappers>
-        <mapper class="com.example.dao.TeacherMapper"/>
-        <mapper class="com.example.dao.StudentMapper"/>
-        <mapper class="com.example.dao.BlogMapper"/>
-<!--        <mapper class="com.example.dao.UserMapper"/>-->
-<!--        <package name="com.example.dao"/>-->
+        <mapper class="com.example.dao.UserMapper"/>
     </mappers>
 </configuration>

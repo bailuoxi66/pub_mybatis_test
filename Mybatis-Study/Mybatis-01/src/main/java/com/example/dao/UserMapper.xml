@@ -6,6 +6,10 @@
 <!--namespace绑定一个对应的Dao/Mapper接口-->
 <!--mybatis-config.xml开启了别名映射才可以使用user，否则需要使用com.example等-->
 <mapper namespace="com.example.dao.UserMapper">
+
+<!--    在当前Mapper.xml中使用二级缓存-->
+    <cache/>
+
     <select id="queryUserById" resultType="user">
         select * from user where id=#{id}
     </select>

@@ -1795,3 +1795,68 @@ List<Blog> queryBlogForeach(Map map);
 
 一级缓存就是一个Map
 
+#### 二级缓存
+
+![image-20201216172250075](/Users/liangzhengtao/Library/Application Support/typora-user-images/image-20201216172250075.png)
+
+- 二级缓存也叫全局缓存，一级缓存作用域太低了，所以诞生了二级缓存
+- 基于namespace级别的缓存，一个命名空间对应一个二级缓存
+- 工作机制
+  - 一个会话查询一条数据，这个数据就被放在当前会话的一级缓存中；
+  - 如果当前会话关闭了，这个会话对应的一级缓存就没了；但我们想要的是，会话关闭了，一级缓存中的数据被保存到二级缓存中；
+  - 新的会话查询信息，就可以从二级缓存中获取内容；
+  - 不同的mapper查出的数据会放在自己对应的缓存（map）中；
+
+步骤：
+
+1、开启全局缓存
+
+```xml
+<!--        显示的开启全局缓存-->
+        <setting name="cacheEnabled" value="true"/>
+```
+
+2、在当前Mapper.xml中使用二级缓存
+
+```xml
+<!--    在当前Mapper.xml中使用二级缓存-->
+    <cache/>
+```
+
+或者进行自定义
+
+```xml
+<!--    在当前Mapper.xml中使用二级缓存-->
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
+```
+
+3、测试
+
+- 问题：我们需要将实体类进行序列化，否则就会报错：
+
+  ```java
+  Caused by: java.io.NotSerializableException: com.example.pojo.User
+  ```
+
+  需要序列化
+
+  ```java
+  //实体类
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public class User implements Serializable {
+      private int id;
+      private String name;
+      private String pwd;
+  }
+  ```
+
+小结：
+
+- 只要开启了二级缓存，在同一个Mapper下就有效
+- 所有数据都会先放在一级缓存中
+- 只有当会话提交，或者关闭的时候，才会提交到二级缓存中

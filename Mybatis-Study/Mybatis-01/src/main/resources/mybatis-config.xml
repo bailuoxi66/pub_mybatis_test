@@ -11,7 +11,10 @@
     </properties>
     
     <settings>
+<!--        标准的日志工厂实现-->
         <setting name="logImpl" value="STDOUT_LOGGING"/>
+<!--        显示的开启全局缓存-->
+        <setting name="cacheEnabled" value="true"/>
     </settings>
 <!--    可以给实体类起别名-->
     <typeAliases>
